@@ -306,12 +306,36 @@ You: Classify examples/ham_example.txt using the multi-agent system
 - Real-time classification API
 - Continuous pattern learning from feedback
 
+## CI/CD Pipeline
+
+This project includes comprehensive CI/CD automation:
+
+- ✅ **Continuous Integration**: Automated testing, linting, security scanning
+- ✅ **Continuous Delivery**: Automated releases, Docker builds, documentation
+- ✅ **Code Quality**: Complexity analysis, agent validation, weekly scans
+- ✅ **GitHub Templates**: PR and issue templates for contributions
+
+See [CI_CD.md](CI_CD.md) for complete pipeline documentation.
+
+**Quick Start:**
+```bash
+# Run CI checks locally
+flake8 src/ && black src/ && python src/batch_test.py
+
+# Create release
+git tag v1.0.0 && git push origin v1.0.0
+
+# Build Docker image
+docker build -t spam-classifier .
+```
+
 ## References
 
 - [Claude Code Documentation](https://docs.claude.com/en/docs/claude-code)
 - [Multi-Agent Systems](https://www.anthropic.com/)
 - [Project Specification](SPECIFICATION_DESIGN.md)
 - [Results Analysis](RESULTS_COMPARISON.md)
+- [CI/CD Pipeline](CI_CD.md)
 
 ## License
 
@@ -322,4 +346,4 @@ Educational demonstration project.
 **Version**: 2.0 (Real Agents Only)
 **Date**: October 7, 2025
 **Approach**: Pure Claude Code Multi-Agent System via Task Tool
-**Status**: Tested and validated (100% accuracy on samples)
+**Status**: ✅ Production Ready with CI/CD
