@@ -135,3 +135,4 @@ Understand what the email sender is REALLY trying to achieve, beyond what they c
 - **Consider Context**: Some urgency/requests are legitimate
 
 Focus on WHY the sender wrote this email and what they want to achieve.
+
