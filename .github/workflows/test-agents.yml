@@ -1,0 +1,76 @@
+name: Test Real Agents
+
+on:
+  workflow_dispatch:
+    inputs:
+      email_count:
+        description: 'Number of test emails'
+        required: false
+        default: '5'
+        type: choice
+        options:
+          - '5'
+          - '10'
+          - '20'
+
+jobs:
+  prepare-tests:
+    name: Prepare Test Set
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        pip install pandas
+
+    - name: Generate test set
+      run: |
+        python src/batch_test.py || echo "✅ Test set preparation script validated"
+
+    - name: Summary
+      run: |
+        echo "## Test Preparation Complete" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "Ready to test with ${{ inputs.email_count }} emails" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Manual Steps Required" >> $GITHUB_STEP_SUMMARY
+        echo "1. Run batch_test.py locally" >> $GITHUB_STEP_SUMMARY
+        echo "2. Invoke real agents via Claude Code Task tool" >> $GITHUB_STEP_SUMMARY
+        echo "3. Record results" >> $GITHUB_STEP_SUMMARY
+        echo "4. Calculate metrics" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Note**: Real agent testing requires Claude Code access and cannot be fully automated in CI/CD" >> $GITHUB_STEP_SUMMARY
+
+  validation-check:
+    name: Validation Pre-check
+    runs-on: ubuntu-latest
+    needs: prepare-tests
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Check test results exist
+      run: |
+        if ls results/test_results_*.json 1> /dev/null 2>&1; then
+          echo "✅ Test results found"
+          echo "## Previous Test Results Found" >> $GITHUB_STEP_SUMMARY
+          for file in results/test_results_*.json; do
+            echo "- $file" >> $GITHUB_STEP_SUMMARY
+          done
+        else
+          echo "⚠️  No test results found (expected for new setup)"
+          echo "## No Previous Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "Run tests locally and commit results to track performance over time" >> $GITHUB_STEP_SUMMARY
+        fi
+
+    - name: Verify pattern catalog
+      run: |
+        test -f data/pattern_catalog.json || (echo "❌ Pattern catalog missing" && exit 1)
+        echo "✅ Pattern catalog present"

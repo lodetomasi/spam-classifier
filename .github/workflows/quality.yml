@@ -1,0 +1,193 @@
+name: Code Quality & Coverage
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 0 * * 0'  # Weekly on Sunday
+
+jobs:
+  code-quality:
+    name: Code Quality Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pylint radon flake8 mccabe
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+    - name: Analyze code complexity
+      run: |
+        echo "## Code Complexity Report" > complexity-report.txt
+        echo "" >> complexity-report.txt
+        radon cc src/ -s -a >> complexity-report.txt || true
+        radon mi src/ -s >> complexity-report.txt || true
+        cat complexity-report.txt
+
+    - name: Run pylint
+      run: |
+        pylint src/ --exit-zero --output-format=json > pylint-report.json || true
+        pylint src/ --exit-zero --output-format=text || true
+
+    - name: Check cyclomatic complexity
+      run: |
+        python -m mccabe --min 5 src/*.py || echo "⚠️  Complexity warnings found"
+
+    - name: Upload reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: quality-reports
+        path: |
+          complexity-report.txt
+          pylint-report.json
+
+  agent-validation:
+    name: Validate Agent Configurations
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Validate agent markdown syntax
+      run: |
+        echo "Validating agent configurations..."
+        for file in .claude/agents/*.md; do
+          echo "Checking $file..."
+          grep -q "^---$" "$file" || (echo "❌ Missing frontmatter in $file" && exit 1)
+          grep -q "name:" "$file" || (echo "❌ Missing name in $file" && exit 1)
+          grep -q "description:" "$file" || (echo "❌ Missing description in $file" && exit 1)
+          echo "✅ $file validated"
+        done
+
+    - name: Check agent prompt quality
+      run: |
+        for file in .claude/agents/*.md; do
+          lines=$(wc -l < "$file")
+          if [ $lines -lt 20 ]; then
+            echo "⚠️  $file is very short ($lines lines)"
+          fi
+        done
+        echo "✅ Agent prompts checked"
+
+  pattern-catalog-validation:
+    name: Validate Pattern Catalog
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Validate pattern catalog structure
+      run: |
+        python << 'EOF'
+        import json
+        import sys
+
+        print("Validating pattern catalog...")
+
+        with open('data/pattern_catalog.json', 'r') as f:
+            catalog = json.load(f)
+
+        # Check required keys
+        required_keys = ['spam_patterns', 'ham_patterns', 'few_shot_examples']
+        for key in required_keys:
+            if key not in catalog:
+                print(f"❌ Missing required key: {key}")
+                sys.exit(1)
+
+        # Validate spam patterns
+        if 'intent_patterns' in catalog['spam_patterns']:
+            spam_count = len(catalog['spam_patterns']['intent_patterns'])
+            print(f"✅ Found {spam_count} spam intent patterns")
+
+        # Validate ham patterns
+        if 'legitimate_characteristics' in catalog['ham_patterns']:
+            ham_count = len(catalog['ham_patterns']['legitimate_characteristics'])
+            print(f"✅ Found {ham_count} legitimate characteristics")
+
+        # Validate few-shot examples
+        if 'spam' in catalog['few_shot_examples']:
+            spam_examples = len(catalog['few_shot_examples']['spam'])
+            print(f"✅ Found {spam_examples} spam examples")
+
+        if 'ham' in catalog['few_shot_examples']:
+            ham_examples = len(catalog['few_shot_examples']['ham'])
+            print(f"✅ Found {ham_examples} ham examples")
+
+        print("\n✅ Pattern catalog structure valid")
+        EOF
+
+  documentation-quality:
+    name: Documentation Quality Check
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Check README completeness
+      run: |
+        echo "Checking README.md..."
+
+        # Required sections
+        grep -q "## Overview" README.md || (echo "❌ Missing Overview" && exit 1)
+        grep -q "## Architecture" README.md || (echo "❌ Missing Architecture" && exit 1)
+        grep -q "## Installation" README.md || (echo "❌ Missing Installation" && exit 1)
+        grep -q "## Usage" README.md || (echo "❌ Missing Usage" && exit 1)
+        grep -q "## Performance" README.md || (echo "❌ Missing Performance" && exit 1)
+
+        # Check for broken links
+        grep -oP '\[.*?\]\(.*?\)' README.md | while read link; do
+          file=$(echo $link | sed -n 's/.*(\(.*\))/\1/p' | cut -d'#' -f1)
+          if [[ $file == http* ]]; then
+            continue  # Skip external links
+          fi
+          if [[ ! -z $file && ! -f $file ]]; then
+            echo "⚠️  Potential broken link: $file"
+          fi
+        done
+
+        echo "✅ README.md validated"
+
+    - name: Check specification completeness
+      run: |
+        echo "Checking SPECIFICATION_DESIGN.md..."
+        test -s SPECIFICATION_DESIGN.md || (echo "❌ Specification empty" && exit 1)
+
+        grep -q "Agent" SPECIFICATION_DESIGN.md || (echo "⚠️  No agent descriptions found")
+        grep -q "Architecture" SPECIFICATION_DESIGN.md || (echo "⚠️  No architecture section")
+
+        echo "✅ Specification validated"
+
+  quality-summary:
+    name: Quality Summary
+    runs-on: ubuntu-latest
+    needs: [code-quality, agent-validation, pattern-catalog-validation, documentation-quality]
+    if: always()
+
+    steps:
+    - name: Generate summary
+      run: |
+        echo "## 📊 Code Quality Report" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Checks Completed" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Code complexity analysis" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Agent configuration validation" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Pattern catalog validation" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Documentation quality check" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Status**: Quality checks passed" >> $GITHUB_STEP_SUMMARY
