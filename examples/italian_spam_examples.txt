@@ -1,0 +1,155 @@
+=== ESEMPIO 1: PHISHING SIAE ===
+Da: notifiche@slae-italia.com
+Oggetto: URGENTE - Verifica Account SIAE
+
+Gentile Associato,
+
+Il vostro account SIAE risulta sospeso per irregolarità nei pagamenti.
+
+È necessario verificare i dati entro 48 ore per evitare la chiusura definitiva.
+
+Clicca qui per aggiornare: http://slae-verifiche.com/login
+
+Cordiali saluti,
+Servizio Assistenza SIAE
+
+[INDICATORS: typo in domain "slae" instead of "siae", urgency, suspicious link]
+
+=== ESEMPIO 2: FALSA FATTURA ELETTRONICA ===
+Da: sdi-notifiche@pec-sistema.it
+Oggetto: Fattura Elettronica Scartata - ID_SDI_001234
+
+Spett.le Ditta,
+
+La fattura elettronica n. IT2025001234 è stata SCARTATA dal Sistema di Interscambio
+per i seguenti motivi:
+
+- P.IVA destinatario non valida
+- Formato XML non conforme
+
+Scaricare XML corretto allegato ed inviare nuovamente.
+
+File allegato: fattura_corretta.xml.exe
+
+[INDICATORS: fake SDI, suspicious attachment .exe, urgency]
+
+=== ESEMPIO 3: PHISHING AGENZIA ENTRATE ===
+Da: comunicazioni@agenziaentrate-gov.it
+Oggetto: Irregolarità fiscale - Azione richiesta
+
+Egregio Contribuente,
+
+L'Agenzia delle Entrate ha rilevato irregolarità nella Sua dichiarazione dei redditi 2024.
+
+Per evitare sanzioni amministrative di €5.000, è necessario regolarizzare entro 24 ore.
+
+Accedi al portale: http://agenziaentrate-verifica.com
+
+Distinti saluti,
+Agenzia delle Entrate - Ufficio Controlli
+
+[INDICATORS: fake domain, urgency 24h, threatening language, suspicious link]
+
+=== ESEMPIO 4: PHISHING POSTE ITALIANE ===
+Da: notifiche@poste-delivery.com
+Oggetto: Pacco in giacenza - Codice 192837465
+
+Gentile Cliente,
+
+Il tuo pacco con codice tracking 192837465 è in giacenza presso il centro di smistamento.
+
+Per ritirare il pacco è necessario pagare le spese di giacenza di €2.99.
+
+Clicca qui per pagare: http://poste-tracking.net/pay
+
+Se non paghi entro 3 giorni il pacco sarà restituito al mittente.
+
+Cordiali saluti,
+Poste Italiane
+
+[INDICATORS: fake domain, small payment request, urgency, suspicious link]
+
+=== ESEMPIO 5: SPAM BONUS COVID ===
+Da: inps-bonus@gov-servizi.it
+Oggetto: Bonus COVID non richiesto - €600 disponibili
+
+Egregio/a Cittadino/a,
+
+Hai diritto al bonus COVID di €600 che non hai ancora richiesto.
+
+Il bonus scade tra 48 ore. Richiedi subito compilando il modulo:
+
+http://inps-bonus-richiesta.com/form
+
+Non perdere questa opportunità!
+
+INPS - Servizio Prestazioni
+
+[INDICATORS: fake domain, urgency, bonus scam, suspicious link]
+
+=== ESEMPIO 6: PHISHING BANCA ===
+Da: sicurezza@intesasanpaolo-alert.com
+Oggetto: Accesso sospetto al tuo conto
+
+Gentile Cliente,
+
+Abbiamo rilevato un accesso sospetto al tuo conto corrente da un dispositivo non riconosciuto.
+
+Per motivi di sicurezza il tuo home banking è stato temporaneamente bloccato.
+
+Verifica la tua identità qui: http://intesa-verifica.com/login
+
+Se non sei stato tu, clicca qui per bloccare il conto.
+
+Intesa Sanpaolo - Sicurezza
+
+[INDICATORS: fake domain with hyphen, urgency, threatening, suspicious link]
+
+=== ESEMPIO 7: HAM - COMUNICAZIONE SIAE LEGITTIMA ===
+Da: comunicazioni@siae.it
+Oggetto: Rif. pratica 2025/SIAE/12345
+
+Spett.le Associato,
+
+Con riferimento alla Sua richiesta prot. n. 12345 del 15/09/2025, si comunica
+che la pratica è stata presa in carico dall'ufficio competente.
+
+Le verrà data risposta entro 30 giorni lavorativi come da regolamento.
+
+Per informazioni può contattare l'ufficio al numero 06-12345678 oppure
+recarsi presso la sede in Via della Letteratura 30, Roma.
+
+Cordiali saluti,
+SIAE - Ufficio Pratiche Associati
+
+Società Italiana degli Autori ed Editori
+Via della Letteratura, 30 - 00144 Roma
+Tel: 06-12345678 | www.siae.it
+
+[INDICATORS: legitimate domain @siae.it, protocol number, physical address,
+professional tone, realistic timeline, contact info]
+
+=== ESEMPIO 8: HAM - FATTURA ELETTRONICA LEGITTIMA ===
+Da: fatturazione@azienda-fornitore.it
+Oggetto: Fattura Elettronica n. 2025/001234
+
+Spett.le Cliente,
+
+in allegato la fattura elettronica n. 2025/001234 del 07/10/2025
+relativa alla fornitura come da Vs. ordine n. 5678 del 01/10/2025.
+
+Importo totale: € 1.250,00 + IVA
+Scadenza pagamento: 06/11/2025 (30gg data fattura)
+
+La fattura è stata regolarmente trasmessa al Sistema di Interscambio
+con codice univoco: 12345ABCDE.
+
+Per qualsiasi chiarimento restiamo a disposizione.
+
+Cordiali saluti,
+Ufficio Amministrazione
+Azienda Fornitore S.r.l.
+P.IVA 12345678901
+
+[INDICATORS: legitimate business email, specific order/invoice numbers,
+realistic payment terms, SDI code, VAT number, professional signature]

@@ -1,0 +1,132 @@
+{
+  "italian_spam_patterns": {
+    "phishing_istituzionale": {
+      "description": "Phishing verso enti pubblici italiani",
+      "targets": [
+        "SIAE",
+        "Agenzia delle Entrate",
+        "INPS",
+        "Poste Italiane",
+        "Banca d'Italia",
+        "Regione/Comune"
+      ],
+      "indicators": [
+        "verifica account",
+        "sospensione servizio",
+        "irregolarità fiscale",
+        "pagamento pendente",
+        "accesso bloccato",
+        "aggiornamento dati",
+        "conferma identità"
+      ],
+      "examples": [
+        "Gentile utente SIAE, il suo account risulta sospeso",
+        "Agenzia Entrate: irregolarità dichiarazione redditi",
+        "INPS: pagamento pensione bloccato",
+        "Poste: pacco in giacenza, clicca qui"
+      ]
+    },
+    "false_fatture": {
+      "description": "False fatture elettroniche",
+      "indicators": [
+        "fattura elettronica",
+        "sistema di interscambio",
+        "SDI",
+        "mancato recapito",
+        "XML allegato",
+        "P.IVA",
+        "fattura PA",
+        "scartata dal SDI"
+      ],
+      "examples": [
+        "Fattura elettronica scartata dal SDI",
+        "Notifica mancato recapito fattura n. IT001234",
+        "Fattura PA respinta - verificare dati"
+      ]
+    },
+    "truffe_bancarie": {
+      "description": "Phishing bancario italiano",
+      "banks": [
+        "Intesa Sanpaolo",
+        "UniCredit",
+        "BNL",
+        "Poste Italiane",
+        "Monte dei Paschi",
+        "UBI Banca"
+      ],
+      "indicators": [
+        "home banking",
+        "token scaduto",
+        "dispositivo nuovo",
+        "operazione sospetta",
+        "verifica OTP",
+        "carta bloccata"
+      ]
+    },
+    "spam_commerciale_italiano": {
+      "description": "Spam promozionale in italiano",
+      "indicators": [
+        "offerta imperdibile",
+        "solo per oggi",
+        "sconto esclusivo",
+        "gratis per te",
+        "ultima occasione",
+        "clicca subito"
+      ]
+    },
+    "covid_scam": {
+      "description": "Truffe legate a COVID/bonus",
+      "indicators": [
+        "bonus COVID",
+        "contributo a fondo perduto",
+        "INPS bonus",
+        "sostegno emergenza",
+        "ristoro automatico"
+      ]
+    }
+  },
+  "linguistic_indicators": {
+    "italian_spam_markers": [
+      "Egregio/a",
+      "Spett.le",
+      "Distinti saluti",
+      "Cordiali saluti",
+      "In allegato",
+      "Come da accordi",
+      "Si prega di",
+      "Entro e non oltre"
+    ],
+    "urgency_italian": [
+      "urgente",
+      "immediato",
+      "entro 24 ore",
+      "scadenza imminente",
+      "ultima chiamata",
+      "solo oggi"
+    ],
+    "poor_italian": [
+      "grammar errors typical of machine translation",
+      "formal/informal mixing (Lei/tu)",
+      "wrong articles (il/la confusion)",
+      "anglicisms in formal context"
+    ]
+  },
+  "italian_ham_patterns": {
+    "business_italian": [
+      "Preventivo n.",
+      "Ordine n.",
+      "Fattura n.",
+      "Contratto n.",
+      "Rif. vs. email del",
+      "Come da accordi telefonici",
+      "Per quanto concordato"
+    ],
+    "institutional_communication": [
+      "Protocollo n.",
+      "Prot. Gen.",
+      "Determina n.",
+      "Delibera n.",
+      "Atto dirigenziale"
+    ]
+  }
+}
