@@ -1,0 +1,15 @@
+{
+  "spam_score": 0.05,
+  "confidence": 0.92,
+  "red_flags": [
+    "Informal tone with 'ho ho ho' greeting",
+    "Casual writing style with lowercase 'i'"
+  ],
+  "patterns_detected": [
+    "business_correspondence",
+    "internal_communication",
+    "specific_details"
+  ],
+  "recommendation": "HAM",
+  "reasoning": "This email shows clear signs of legitimate internal business communication. It references a specific calendar that was distributed at the beginning of fall semester, mentions a scheduled retreat for specific dates (January 5-6), and uses 'neon leaders' which appears to be an organization/group name. The informal but friendly tone ('ho ho ho') is consistent with internal team communications during the holiday season. The email discusses scheduling and planning, which is typical of business correspondence. No commercial offers, no suspicious links, no urgency tactics."
+}

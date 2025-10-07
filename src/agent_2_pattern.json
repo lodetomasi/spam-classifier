@@ -1,0 +1,13 @@
+{
+  "spam_score": 0.03,
+  "confidence": 0.95,
+  "patterns_found": [
+    "business_correspondence",
+    "specific_details",
+    "internal_references"
+  ],
+  "risk_level": "LOW",
+  "urls_analyzed": [],
+  "recommendation": "HAM",
+  "reasoning": "No spam patterns detected. The email contains specific details (dates: January 5-6, December 25-January 1, reference to 'fall semester', 'calendar that I handed out'). These are strong indicators of legitimate business correspondence. No pharmaceutical keywords, no software offers, no financial schemes. No suspicious URLs present. The reference to a previously distributed calendar and a scheduled organizational retreat indicates this is internal communication within a known group. Risk level is LOW - no malicious indicators found."
+}

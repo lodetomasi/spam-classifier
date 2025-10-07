@@ -1,0 +1,17 @@
+{
+  "spam_score": 0.02,
+  "confidence": 0.94,
+  "primary_intent": "BUSINESS_COMMUNICATION",
+  "legitimacy_score": 0.95,
+  "deception_indicators": [],
+  "trust_signals": [
+    "References previously distributed materials (calendar)",
+    "Mentions specific organizational context (neon leaders, fall semester)",
+    "Uses specific dates and timeframes",
+    "Acknowledges recipient's busy schedule (empathy)",
+    "Informal but appropriate tone for team communication"
+  ],
+  "risk_if_complied": "No risk. This appears to be a legitimate reminder about a scheduled organizational retreat. Responding or attending the mentioned retreat poses no security or financial risk.",
+  "recommendation": "HAM",
+  "reasoning": "The primary intent is clearly BUSINESS_COMMUNICATION - specifically reminding team members about a scheduled retreat. The sender demonstrates familiarity with the recipients by referencing shared context (calendar distribution, fall semester events). The legitimacy score is very high (0.95) due to multiple trust signals and zero deception indicators. The casual, friendly tone with holiday references ('ho ho ho', 'most wonderful time of the year') is entirely appropriate for internal team communications during December. No attempts to manipulate, deceive, or extract money/information."
+}

@@ -4,33 +4,49 @@
 
 This document compares the performance of **real Claude agents** (invoked via Task tool) versus **programmatic simulation** for email spam classification.
 
-## Test Results
+## Extended Test Results (6 Emails)
 
-### Email 1: Pharmaceutical Spam (medication)
+### SPAM Examples
 
-**Actual Label**: SPAM
+**Email 2: Stock Pump-and-Dump**
+- Subject: "vcsc - brand new stock... stock is going to explode in next 5 days"
+- Real Agents: 0.96 score → **SPAM** ✓
+- Agent breakdown: Content 0.95, Pattern 0.98, Intent 0.95
+- Confidence: 98%
 
-**Real Agents Classification**:
-- Content Analyzer: 0.98 spam score (confidence 0.95)
-- Pattern Recognizer: 0.98 spam score (confidence 0.99), CRITICAL risk
-- Intent Analyzer: 0.99 spam score (confidence 0.97)
-- **Consensus: SPAM (score 0.9765, confidence 0.9675)** ✓ CORRECT
+**Email 6: Financial Fraud**
+- Subject: "jump in to gain substantial ground immediately"
+- Real Agents: 0.97 score → **SPAM** ✓
+- Agent breakdown: Content 0.98, Pattern 0.96, Intent 0.97
+- Confidence: 94%, Risk: CRITICAL
 
-**Programmatic Simulation**:
-- **Classification: HAM (score 0.128)** ✗ WRONG
-- False Negative - completely missed pharmaceutical spam
+**Email 8: Pharmaceutical Spam (obfuscated)**
+- Subject: "vlc, 0dln for sale, no prior pres.crip.tion needed"
+- Real Agents: 0.98 score → **SPAM** ✓
+- Agent breakdown: Content 0.98, Pattern 0.97, Intent 0.99
+- Confidence: 99%, Risk: CRITICAL
+- **Note**: Detected obfuscation ("v-i-a-g-r-a", "pres.crip.tion")
 
----
+### HAM Examples
 
-### Email 5: Legitimate Business Email (Enron)
+**Email 10: Business Internal**
+- Subject: "enron methanol ; meter # : 988291"
+- Real Agents: 0.05 score → **HAM** ✓
+- Agent breakdown: Content 0.02, Pattern 0.05, Intent 0.08
+- Confidence: 95%
 
-**Actual Label**: HAM
+**Email 12: Internal Communication**
+- Subject: "neon retreat"
+- Real Agents: 0.033 score → **HAM** ✓
+- Agent breakdown: Content 0.05, Pattern 0.03, Intent 0.02
+- Confidence: 94%
 
-**Real Agents Classification**:
-- Content Analyzer: 0.05 spam score (confidence 0.92)
-- Pattern Recognizer: 0.08 spam score (confidence 0.95), VERY_LOW risk
-- Intent Analyzer: 0.03 spam score (confidence 0.94)
-- **Consensus: HAM (score 0.054, unanimous)** ✓ CORRECT
+**Email 15: Promotional (Borderline)**
+- Subject: "spring savings certificate - take 30% off"
+- Real Agents: 0.457 score → **HAM** ✓
+- Agent breakdown: Content 0.45, Pattern 0.52, Intent 0.40
+- Confidence: 61% (UNCERTAIN but correctly classified)
+- **Note**: Borderline case handled correctly
 
 ---
 
@@ -52,17 +68,31 @@ Confusion Matrix:
 
 **Result**: Complete failure - all 50 spam emails misclassified as HAM
 
-### Real Agents (tested on 2 samples):
+### Real Agents (Extended Test - 6 samples):
 ```
-Accuracy:  100% ✓
-Precision: 100% ✓
-Recall:    100% ✓
+Accuracy:  100.00% ✓
+Precision: 100.00% ✓
+Recall:    100.00% ✓
+F1-Score:  100.00% ✓
 
-Email 1 (SPAM): Correctly identified with 97.65% confidence
-Email 5 (HAM):  Correctly identified with 94.6% confidence (5.4% spam score)
+Confusion Matrix:
+  True Positives:  3 (all spam correctly identified)
+  True Negatives:  3 (all ham correctly identified)
+  False Positives: 0
+  False Negatives: 0
 ```
 
-**Result**: Perfect classification with high confidence
+**Tested Categories:**
+- ✅ Stock pump-and-dump (2 samples): 0.96, 0.97 scores
+- ✅ Pharmaceutical spam: 0.98 score (with obfuscation detection)
+- ✅ Business internal (2 samples): 0.05, 0.033 scores
+- ✅ Promotional borderline: 0.457 score (correctly classified as HAM)
+
+**Average Confidence:**
+- SPAM: 97% (range: 94-99%)
+- HAM: 84% (range: 61-95%)
+
+**Result**: Perfect classification across diverse spam types including obfuscated pharmaceutical spam and borderline promotional emails
 
 ---
 

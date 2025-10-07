@@ -1,0 +1,62 @@
+{
+  "email_id": 12,
+  "actual": "ham",
+  "predicted": "HAM",
+  "final_score": 0.033,
+  "confidence": 0.937,
+  "agent_scores": {
+    "content_analyzer": {
+      "spam_score": 0.05,
+      "confidence": 0.92,
+      "recommendation": "HAM",
+      "red_flags": [
+        "Informal tone with 'ho ho ho' greeting",
+        "Casual writing style with lowercase 'i'"
+      ],
+      "patterns_detected": [
+        "business_correspondence",
+        "internal_communication",
+        "specific_details"
+      ]
+    },
+    "pattern_recognizer": {
+      "spam_score": 0.03,
+      "confidence": 0.95,
+      "recommendation": "HAM",
+      "risk_level": "LOW",
+      "patterns_found": [
+        "business_correspondence",
+        "specific_details",
+        "internal_references"
+      ],
+      "urls_analyzed": []
+    },
+    "intent_analyzer": {
+      "spam_score": 0.02,
+      "confidence": 0.94,
+      "recommendation": "HAM",
+      "primary_intent": "BUSINESS_COMMUNICATION",
+      "legitimacy_score": 0.95,
+      "deception_indicators": [],
+      "trust_signals": [
+        "References previously distributed materials (calendar)",
+        "Mentions specific organizational context (neon leaders, fall semester)",
+        "Uses specific dates and timeframes",
+        "Acknowledges recipient's busy schedule (empathy)",
+        "Informal but appropriate tone for team communication"
+      ]
+    },
+    "consensus_agent": {
+      "final_classification": "HAM",
+      "agent_agreement": 0.97,
+      "summary": "All three agents unanimously classify this email as HAM with high confidence. The email is a legitimate internal business communication reminding team members about a scheduled organizational retreat.",
+      "key_evidence": [
+        "References previously distributed calendar from fall semester",
+        "Contains specific dates and organizational context (neon leaders retreat, January 5-6)",
+        "Demonstrates familiarity with recipients and acknowledges their busy schedules",
+        "No commercial offers, suspicious URLs, or manipulation tactics",
+        "All three agents detected business_correspondence and specific_details patterns"
+      ]
+    }
+  }
+}
