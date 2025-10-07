@@ -12,49 +12,18 @@ This system uses 4 specialized Claude AI agents to collaboratively classify emai
 - ✅ **Full explainability** - every decision includes clear reasoning
 - ❌ **50% accuracy** with programmatic simulation (all spam misclassified as ham)
 
-### What "50% accuracy with programmatic simulation" means
+### What "50% accuracy" means
 
-The programmatic simulation achieved **random-guess performance**:
+**Programmatic simulation tested on 100 emails (50 spam + 50 ham):**
+- ✅ 50 ham emails → correctly classified as HAM
+- ❌ **50 spam emails → ALL misclassified as HAM** (100% false negatives)
+- Result: 50% accuracy = random guessing
 
-```mermaid
-graph TD
-    subgraph "Test Dataset: 100 emails"
-        A[50 SPAM emails]
-        B[50 HAM emails]
-    end
+**Why it failed:** Keyword matching too simplistic, scores too low (0.08 vs 0.7+ needed), no semantic understanding.
 
-    subgraph "Programmatic Simulation Results"
-        A -->|ALL classified as| C[HAM ❌]
-        B -->|correctly classified as| D[HAM ✓]
-    end
+**Why real agents succeed:** Deep semantic analysis, context-aware reasoning, handles obfuscation (e.g., "v-i-a-g-r-a" = viagra).
 
-    subgraph "Metrics"
-        C --> E[True Positives: 0]
-        C --> F[False Negatives: 50]
-        D --> G[True Negatives: 50]
-        D --> H[False Positives: 0]
-    end
-
-    E & F & G & H --> I[Accuracy: 50%<br/>Recall: 0%<br/>Precision: undefined]
-
-    style C fill:#ff6b6b
-    style D fill:#51cf66
-    style I fill:#ffd43b
-```
-
-**Why it failed:**
-- Keyword matching too simplistic
-- Spam scores too low (0.08-0.28 instead of 0.7+)
-- Missed pharmaceutical spam, typosquatting, deception tactics
-- No semantic understanding
-
-**Why real agents succeed:**
-- Deep semantic analysis
-- Context-aware reasoning
-- Pattern recognition with nuance
-- Intent understanding
-
-See [RESULTS_COMPARISON.md](RESULTS_COMPARISON.md) for detailed analysis.
+See [RESULTS_COMPARISON.md](RESULTS_COMPARISON.md) for details.
 
 ## Key Features
 
@@ -67,92 +36,23 @@ See [RESULTS_COMPARISON.md](RESULTS_COMPARISON.md) for detailed analysis.
 
 ## Architecture
 
-### System Overview
-
 ```mermaid
 graph TB
-    subgraph "Input Layer"
-        Email[📧 Email Text]
-        Catalog[📚 Pattern Catalog]
-    end
+    Email[📧 Email] --> CA[Content Analyzer<br/>Semantic Analysis]
+    Email --> PR[Pattern Recognizer<br/>Pattern Matching]
+    Email --> IA[Intent Analyzer<br/>Intent Detection]
 
-    subgraph "Claude Code Task Tool"
-        TaskTool[🤖 Agent Orchestrator]
-    end
+    CA -->|30%| Consensus[Consensus Agent<br/>Weighted Scoring]
+    PR -->|35%| Consensus
+    IA -->|35%| Consensus
 
-    subgraph "Multi-Agent Analysis Layer"
-        CA[🔍 Content Analyzer<br/>Semantic Analysis<br/>Red Flags Detection]
-        PR[🎯 Pattern Recognizer<br/>Pattern Matching<br/>URL Analysis]
-        IA[🧠 Intent Analyzer<br/>Intent Detection<br/>Legitimacy Assessment]
-    end
+    Consensus --> Result[🎯 SPAM/HAM<br/>Score + Evidence]
 
-    subgraph "Consensus Layer"
-        Consensus[⚖️ Consensus Agent<br/>Weighted Scoring<br/>Final Decision]
-    end
-
-    subgraph "Output Layer"
-        Result[📊 Classification Result<br/>SPAM/HAM<br/>Score + Evidence]
-    end
-
-    Email --> TaskTool
-    Catalog --> TaskTool
-    TaskTool --> CA
-    TaskTool --> PR
-    TaskTool --> IA
-
-    CA -->|spam_score: 0.95<br/>confidence: 0.98| Consensus
-    PR -->|spam_score: 0.93<br/>confidence: 0.97| Consensus
-    IA -->|spam_score: 0.96<br/>confidence: 0.99| Consensus
-
-    Consensus -->|Weighted Average<br/>30% + 35% + 35%| Result
-
-    style Email fill:#e3f2fd
-    style Catalog fill:#fff3e0
-    style TaskTool fill:#f3e5f5
     style CA fill:#e8f5e9
     style PR fill:#e8f5e9
     style IA fill:#e8f5e9
     style Consensus fill:#fff9c4
     style Result fill:#ffebee
-```
-
-### Classification Pipeline
-
-```mermaid
-sequenceDiagram
-    participant User
-    participant Claude as Claude Code
-    participant CA as Content Analyzer
-    participant PR as Pattern Recognizer
-    participant IA as Intent Analyzer
-    participant CS as Consensus Agent
-
-    User->>Claude: Classify email
-    Claude->>CA: Invoke with email text + patterns
-    activate CA
-    CA->>CA: Semantic analysis<br/>Detect red flags<br/>Identify patterns
-    CA-->>Claude: {spam_score: 0.95, confidence: 0.98}
-    deactivate CA
-
-    Claude->>PR: Invoke with email text + patterns
-    activate PR
-    PR->>PR: Pattern matching<br/>URL analysis<br/>Risk assessment
-    PR-->>Claude: {spam_score: 0.93, confidence: 0.97, risk: HIGH}
-    deactivate PR
-
-    Claude->>IA: Invoke with email + context from CA/PR
-    activate IA
-    IA->>IA: Intent detection<br/>Legitimacy assessment<br/>Deception analysis
-    IA-->>Claude: {spam_score: 0.96, confidence: 0.99, intent: FRAUD}
-    deactivate IA
-
-    Claude->>CS: Invoke with all agent results
-    activate CS
-    CS->>CS: Weighted scoring<br/>Agreement calculation<br/>Evidence synthesis
-    CS-->>Claude: {classification: SPAM, score: 0.948, agreement: 98%}
-    deactivate CS
-
-    Claude-->>User: Final classification with reasoning
 ```
 
 ### Agents
@@ -287,94 +187,23 @@ this change is needed asap for economics purposes.
 
 ## Performance Comparison
 
-### Tested Results
+| Metric | Real Agents | Programmatic | Delta |
+|--------|-------------|--------------|-------|
+| Accuracy | **100%** ✓ | 50% ✗ | +50% |
+| Precision | **100%** ✓ | 0% ✗ | +100% |
+| Recall | **100%** ✓ | 0% ✗ | +100% |
+| Confidence | 95-99% | 70-75% | +25% |
+| False Negatives | 0 | 50/50 | Critical |
 
-```mermaid
-graph TB
-    subgraph "Email 1: Pharmaceutical SPAM"
-        E1[📧 Subject: medication for sale<br/>Content: viagra, cialis, pills<br/>URL: bombahakcx.com<br/>Ground Truth: SPAM]
-    end
+**Example: Pharmaceutical Spam**
+- Real agents: Score 0.98 → SPAM ✓
+- Simulation: Score 0.08 → HAM ✗ (FALSE NEGATIVE)
 
-    subgraph "Real Agents Analysis"
-        E1 --> RA1[Content: 0.98 ✓<br/>Pattern: 0.98 ✓<br/>Intent: 0.99 ✓]
-        RA1 --> RA2[🚫 Consensus: SPAM<br/>Score: 0.9765<br/>Confidence: 96.75%<br/>Agreement: 100%]
-    end
+**Example: Business Email**
+- Real agents: Score 0.05 → HAM ✓
+- Simulation: Score 0.02 → HAM ✓
 
-    subgraph "Programmatic Simulation"
-        E1 --> PS1[Content: 0.08 ✗<br/>Pattern: 0.05 ✗<br/>Intent: 0.20 ✗]
-        PS1 --> PS2[✅ Classification: HAM<br/>Score: 0.128<br/>FALSE NEGATIVE ❌]
-    end
-
-    style RA2 fill:#51cf66
-    style PS2 fill:#ff6b6b
-```
-
-```mermaid
-graph TB
-    subgraph "Email 5: Legitimate Business HAM"
-        E2[📧 Subject: enron methanol meter #988291<br/>Content: follow up on 4/3/00<br/>Context: internal business<br/>Ground Truth: HAM]
-    end
-
-    subgraph "Real Agents Analysis"
-        E2 --> RA3[Content: 0.05 ✓<br/>Pattern: 0.08 ✓<br/>Intent: 0.03 ✓]
-        RA3 --> RA4[✅ Consensus: HAM<br/>Score: 0.054<br/>Confidence: 93.67%<br/>Agreement: 100%]
-    end
-
-    subgraph "Programmatic Simulation"
-        E2 --> PS3[Content: 0.02<br/>Pattern: 0.03<br/>Intent: 0.01]
-        PS3 --> PS4[✅ Classification: HAM<br/>Score: 0.023<br/>CORRECT ✓]
-    end
-
-    style RA4 fill:#51cf66
-    style PS4 fill:#51cf66
-```
-
-### Metrics Table
-
-| Metric | Real Agents | Programmatic Simulation | Delta |
-|--------|-------------|------------------------|-------|
-| Accuracy | **100%** ✓ | 50% ✗ | **+50%** |
-| Precision | **100%** ✓ | 0% (undefined) ✗ | **+100%** |
-| Recall | **100%** ✓ | 0% ✗ | **+100%** |
-| F1-Score | **100%** ✓ | 0% ✗ | **+100%** |
-| Confidence | 95-99% | 70-75% | **+25%** |
-| False Negatives | 0 | 50 (100%) | **-50** |
-| Spam Detection | Perfect | Complete Failure | Critical |
-
-### Confusion Matrix Comparison
-
-```mermaid
-graph LR
-    subgraph "Real Agents (100 samples)"
-        direction TB
-        RA_TP[True Positives: 50<br/>SPAM → SPAM ✓]
-        RA_TN[True Negatives: 50<br/>HAM → HAM ✓]
-        RA_FP[False Positives: 0]
-        RA_FN[False Negatives: 0]
-    end
-
-    subgraph "Programmatic (100 samples)"
-        direction TB
-        PS_TP[True Positives: 0<br/>SPAM → SPAM ✗]
-        PS_TN[True Negatives: 50<br/>HAM → HAM ✓]
-        PS_FP[False Positives: 0]
-        PS_FN[False Negatives: 50<br/>SPAM → HAM ❌]
-    end
-
-    style RA_TP fill:#51cf66
-    style RA_TN fill:#51cf66
-    style RA_FP fill:#f1f3f5
-    style RA_FN fill:#f1f3f5
-
-    style PS_TP fill:#ff6b6b
-    style PS_TN fill:#51cf66
-    style PS_FP fill:#f1f3f5
-    style PS_FN fill:#ff6b6b
-```
-
-**Conclusion:** Real agents achieve **perfect classification** while programmatic simulation fails catastrophically (classifies ALL spam as ham).
-
-See [RESULTS_COMPARISON.md](RESULTS_COMPARISON.md) for detailed analysis.
+See [RESULTS_COMPARISON.md](RESULTS_COMPARISON.md) for details.
 
 ## Pattern Catalog
 
@@ -409,166 +238,37 @@ Agents return structured JSON with:
 - Detailed findings
 - Recommendation (SPAM/HAM/UNCERTAIN)
 
-### Consensus Scoring Algorithm
-
-```mermaid
-graph LR
-    subgraph "Agent Outputs"
-        CA_Score[Content: 0.95<br/>Confidence: 0.98]
-        PR_Score[Pattern: 0.93<br/>Confidence: 0.97]
-        IA_Score[Intent: 0.96<br/>Confidence: 0.99]
-    end
-
-    subgraph "Weighted Calculation"
-        CA_Score -->|Weight: 30%| W1[0.95 × 0.30 = 0.285]
-        PR_Score -->|Weight: 35%| W2[0.93 × 0.35 = 0.326]
-        IA_Score -->|Weight: 35%| W3[0.96 × 0.35 = 0.336]
-    end
-
-    subgraph "Consensus"
-        W1 --> Sum[Sum = 0.947]
-        W2 --> Sum
-        W3 --> Sum
-
-        CA_Score --> Agree[Agreement = 1.0 - Range<br/>= 1.0 - 0.03 = 0.97]
-        PR_Score --> Agree
-        IA_Score --> Agree
-    end
-
-    subgraph "Decision"
-        Sum --> Decision{Score ≥ 0.7?<br/>Agreement ≥ 0.7?}
-        Agree --> Decision
-
-        Decision -->|Yes| Spam[🚫 SPAM]
-        Decision -->|Score ≤ 0.3| Ham[✅ HAM]
-        Decision -->|Otherwise| Uncertain[⚠️ UNCERTAIN]
-    end
-
-    style Spam fill:#ff6b6b
-    style Ham fill:#51cf66
-    style Uncertain fill:#ffd43b
-```
+### Consensus Scoring
 
 **Formula:**
 ```
-final_score = (content_score × 0.30) + (pattern_score × 0.35) + (intent_score × 0.35)
+final_score = (content × 0.30) + (pattern × 0.35) + (intent × 0.35)
 agent_agreement = 1.0 - (max_score - min_score)
 ```
 
-**Classification Rules:**
-1. **SPAM**: `final_score ≥ 0.7` AND `agent_agreement ≥ 0.7`
-2. **HAM**: `final_score ≤ 0.3` AND `agent_agreement ≥ 0.7`
-3. **UNCERTAIN**: Mixed signals or low agreement (requires human review)
+**Classification:**
+- **SPAM**: score ≥ 0.7 AND agreement ≥ 0.7
+- **HAM**: score ≤ 0.3 AND agreement ≥ 0.7
+- **UNCERTAIN**: otherwise (human review needed)
 
 ## Why Real Agents Only?
 
-### Technical Analysis: Simulation vs Real Agents
+**Programmatic simulation fails because:**
+- ❌ Keyword matching (misses obfuscation: "v-i-a-g-r-a" ≠ "viagra")
+- ❌ No semantic understanding (context-blind)
+- ❌ Scores too low (0.08-0.28 instead of 0.7+)
+- ❌ Misses typosquatting, social engineering
 
-```mermaid
-graph TB
-    subgraph "Programmatic Simulation Approach"
-        PS1[📝 Email Text]
-        PS1 --> PS2{Keyword<br/>Matching}
-        PS2 -->|viagra, cialis| PS3[Score += 0.35]
-        PS2 -->|free, win| PS4[Score += 0.20]
-        PS2 -->|NO keywords| PS5[Score = 0.0]
+**Real agents succeed because:**
+- ✅ Deep semantic analysis (understands "med1cat1on" = medication)
+- ✅ Context-aware reasoning
+- ✅ Detects sophisticated tactics (phishing, deception)
+- ✅ Accurate scoring (0.95+ for spam)
+- ✅ Full explainability
 
-        PS1 --> PS6{Regex<br/>Patterns}
-        PS6 -->|URL with IP| PS7[Score += 0.20]
-        PS6 -->|ALL CAPS| PS8[Score += 0.15]
-
-        PS3 & PS4 & PS5 & PS7 & PS8 --> PS9[Final Score]
-        PS9 --> PS10{Score ≥ 0.7?}
-        PS10 -->|Yes| PS11[SPAM]
-        PS10 -->|No| PS12[HAM]
-    end
-
-    subgraph "Why It Fails"
-        F1[❌ No semantic understanding]
-        F2[❌ Keyword obfuscation bypasses<br/>e.g., v-i-a-g-r-a, v1agra]
-        F3[❌ Context-blind<br/>legitimate use of keywords]
-        F4[❌ Misses sophisticated tactics<br/>typosquatting, social engineering]
-        F5[❌ Scores too low<br/>0.08-0.28 instead of 0.7+]
-    end
-
-    style PS11 fill:#ff6b6b
-    style PS12 fill:#51cf66
-    style F1 fill:#fff3e0
-    style F2 fill:#fff3e0
-    style F3 fill:#fff3e0
-    style F4 fill:#fff3e0
-    style F5 fill:#fff3e0
-```
-
-```mermaid
-graph TB
-    subgraph "Real Claude Agents Approach"
-        RA1[📝 Email Text + Pattern Catalog]
-        RA1 --> RA2[🔍 Content Analyzer<br/>Deep Semantic Analysis]
-
-        RA2 --> RA3[Understands context:<br/>pharmaceutical promotions<br/>vs legitimate prescriptions]
-        RA2 --> RA4[Detects obfuscation:<br/>v-i-a-g-r-a = viagra<br/>c1alis = cialis]
-        RA2 --> RA5[Identifies tactics:<br/>urgency, fear, promises]
-
-        RA1 --> RA6[🎯 Pattern Recognizer<br/>Pattern Matching + Analysis]
-        RA6 --> RA7[URL analysis:<br/>typosquatting detection<br/>paypa1 vs paypal]
-        RA6 --> RA8[Risk assessment:<br/>phishing, malware,<br/>social engineering]
-
-        RA1 --> RA9[🧠 Intent Analyzer<br/>Intent Understanding]
-        RA9 --> RA10[Primary intent:<br/>PHARMACEUTICAL_SALES<br/>CREDENTIAL_THEFT<br/>BUSINESS_COMMUNICATION]
-        RA9 --> RA11[Legitimacy scoring:<br/>trust signals vs<br/>deception indicators]
-
-        RA3 & RA4 & RA5 & RA7 & RA8 & RA10 & RA11 --> RA12[⚖️ Consensus Agent]
-        RA12 --> RA13[Weighted scoring<br/>Evidence synthesis<br/>Confidence assessment]
-        RA13 --> RA14[Final Classification<br/>with Full Reasoning]
-    end
-
-    subgraph "Why It Succeeds"
-        S1[✅ Deep semantic understanding]
-        S2[✅ Context-aware reasoning]
-        S3[✅ Handles obfuscation]
-        S4[✅ Detects sophisticated tactics]
-        S5[✅ Accurate scoring<br/>0.95+ for spam]
-        S6[✅ Full explainability]
-    end
-
-    style RA14 fill:#51cf66
-    style S1 fill:#e8f5e9
-    style S2 fill:#e8f5e9
-    style S3 fill:#e8f5e9
-    style S4 fill:#e8f5e9
-    style S5 fill:#e8f5e9
-    style S6 fill:#e8f5e9
-```
-
-### Failure Modes Comparison
-
-```mermaid
-graph LR
-    subgraph "Pharmaceutical Spam Example"
-        Email["📧 'looking for med1cat1on?<br/>v-i-a-g-r-a, c1alis<br/>no perscription'"]
-    end
-
-    subgraph "Programmatic Analysis"
-        Email --> P1{Keywords found?}
-        P1 -->|"med1cat1on" ≠ "medication"<br/>"v-i-a-g-r-a" ≠ "viagra"| P2[No match ✗]
-        P2 --> P3[Score: 0.08]
-        P3 --> P4[❌ Classification: HAM<br/>FALSE NEGATIVE]
-    end
-
-    subgraph "Real Agent Analysis"
-        Email --> R1[Content Analyzer]
-        R1 --> R2["Understands obfuscation:<br/>'med1cat1on' = medication<br/>'v-i-a-g-r-a' = viagra"]
-        R2 --> R3["Detects pattern:<br/>pharmaceutical spam<br/>no prescription = illegal"]
-        R3 --> R4[Score: 0.98]
-        R4 --> R5[✅ Classification: SPAM<br/>CORRECT]
-    end
-
-    style P4 fill:#ff6b6b
-    style R5 fill:#51cf66
-```
-
-**Conclusion**: Programmatic simulation is **fundamentally insufficient** for spam detection. It cannot handle obfuscation, lacks semantic understanding, and fails on sophisticated attacks. Real Claude agents are required for production use.
+**Example:** Email with "v-i-a-g-r-a, c1alis, no perscription"
+- Simulation: No keyword match → 0.08 → HAM ❌
+- Real agents: Understands obfuscation → 0.98 → SPAM ✓
 
 ## Technical Specification
 
