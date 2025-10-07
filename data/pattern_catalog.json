@@ -1,0 +1,184 @@
+{
+  "spam_patterns": {
+    "content_patterns": [
+      {
+        "pattern_type": "unrealistic_financial_offers",
+        "description": "Too-good-to-be-true financial offers and prizes",
+        "examples": [
+          "Subject: superb so . ftware\r\nyoull discover awesome software available at shocking prices .\r\nyour lucky chance to get with discounts !\r\ndont be depriv",
+          "Subject: have the ability to attract members of the opposite sex\r\nimprove your sex appeal 1 , 000 %\r\ni ' ve experimented with a myriad of pheromones p",
+          "Subject: how cuold you do this to a firned ?\r\nsave up to 70 % on all kind of drugs\r\nquick ordering amd delivery\r\nfast and free shipping - we have them"
+        ],
+        "indicators": [
+          "free",
+          "win",
+          "prize",
+          "$",
+          "save up to",
+          "discount"
+        ],
+        "frequency": "found in 21/50 samples"
+      }
+    ],
+    "structural_patterns": [],
+    "intent_patterns": [
+      {
+        "pattern_type": "pharmaceutical_spam",
+        "description": "Unsolicited pharmaceutical product promotions",
+        "examples": [
+          "cheap viagra",
+          "cialis soft tabs",
+          "prescription medication"
+        ],
+        "indicators": [
+          "medication names",
+          "pharmacy",
+          "prescription",
+          "enhancement"
+        ],
+        "frequency": "found in 7/50 samples"
+      },
+      {
+        "pattern_type": "pirated_software_offers",
+        "description": "Illegal software at suspiciously low prices",
+        "examples": [
+          "$70 Windows XP",
+          "$80 Microsoft Office",
+          "cheap software"
+        ],
+        "indicators": [
+          "software prices",
+          "multiple products",
+          "shocking prices"
+        ],
+        "frequency": "found in 9/50 samples"
+      }
+    ]
+  },
+  "ham_patterns": {
+    "legitimate_characteristics": [
+      {
+        "pattern_type": "business_correspondence",
+        "description": "Internal business emails with professional tone",
+        "examples": [
+          "Please review the attached",
+          "RE: meeting scheduled",
+          "FYI - update on project"
+        ],
+        "indicators": [
+          "professional tone",
+          "internal references",
+          "specific details",
+          "reply threads"
+        ],
+        "frequency": "found in 19/50 samples"
+      },
+      {
+        "pattern_type": "specific_details",
+        "description": "Emails with specific numbers, IDs, dates, and references",
+        "examples": [
+          "Deal #213005",
+          "Meter 0980438",
+          "Account #123-4567"
+        ],
+        "indicators": [
+          "specific IDs",
+          "account numbers",
+          "reference numbers",
+          "dates"
+        ],
+        "frequency": "found in 45/50 samples"
+      }
+    ]
+  },
+  "few_shot_examples": {
+    "spam": [
+      {
+        "text": "Subject: record sales , profits , earnings , stock price and trading for leth jylra\r\nmarket mover stock report ' s last pick ( cwtd ) exploded from $ 1 . 19 to\r\n$ 9 . 20 , a gain of over 670 % in 5 days ( feb 12 - 17 ) ! ! !\r\nhere is our next hot pick which we feel is the most undervalued stock\r\nwe have ever featured and should outperform all other picks this year based\r\non their sales figures ( incl . a backlog of over $ 100 million ) , incredibly solid\r\nnumbers , and low outstanding share tota",
+        "patterns_detected": [
+          "urgency_and_pressure",
+          "unrealistic_financial_offers"
+        ],
+        "spam_score": 0.95,
+        "why_spam": "Combines urgency tactics with unrealistic financial offers"
+      },
+      {
+        "text": "Subject: better than viagra\r\nhi !\r\nwe have a new product that we offer to you , c _ i _ a _ l _ i _ s soft tabs ,\r\ncialis soft tabs is the new impotence treatment drug that everyone\r\nis talking about . soft tabs acts up to 36 hours , compare this to\r\nonly two or three hours of viagra action ! the active ingredient is\r\ntadalafil , same as in brand cialis .\r\nsimply dissolve half a pill under your tongue , 10 min before sex ,\r\nfor the best erections you ' ve ever had !\r\nsoft tabs also have less sid",
+        "patterns_detected": [
+          "pharmaceutical_spam",
+          "suspicious_urls"
+        ],
+        "spam_score": 0.92,
+        "why_spam": "Unsolicited pharmaceutical product promotion"
+      },
+      {
+        "text": "Subject: superb so . ftware\r\nyoull discover awesome software available at shocking prices .\r\nyour lucky chance to get with discounts !\r\ndont be deprived of your happiest chance to get this software at most prolific prices ever .\r\nhttp : / / allprogs . info / index . php ? s = 2975\r\nmirrior # 1 : http : / / compparadise . info / index . php ? s = 2975\r\nmirrior # 2 : http : / / compytonia . com / index . php ? s = 2975\r\nmirrior # 3 : http : / / compyland . info / index . php ? s = 2975\r\nmirrior # ",
+        "patterns_detected": [
+          "pirated_software_offers",
+          "unrealistic_financial_offers"
+        ],
+        "spam_score": 0.9,
+        "why_spam": "Illegal software at suspiciously low prices"
+      },
+      {
+        "text": "Subject: superb so . ftware\r\nyoull discover awesome software available at shocking prices .\r\nyour lucky chance to get with discounts !\r\ndont be deprived of your happiest chance to get this software at most prolific prices ever .\r\nhttp : / / allprogs . info / index . php ? s = 2975\r\nmirrior # 1 : http : / / compparadise . info / index . php ? s = 2975\r\nmirrior # 2 : http : / / compytonia . com / index . php ? s = 2975\r\nmirrior # 3 : http : / / compyland . info / index . php ? s = 2975\r\nmirrior # ",
+        "patterns_detected": [
+          "generic_spam"
+        ],
+        "spam_score": 0.85,
+        "why_spam": "Contains multiple spam indicators"
+      },
+      {
+        "text": "Subject: better than viagra\r\nhi !\r\nwe have a new product that we offer to you , c _ i _ a _ l _ i _ s soft tabs ,\r\ncialis soft tabs is the new impotence treatment drug that everyone\r\nis talking about . soft tabs acts up to 36 hours , compare this to\r\nonly two or three hours of viagra action ! the active ingredient is\r\ntadalafil , same as in brand cialis .\r\nsimply dissolve half a pill under your tongue , 10 min before sex ,\r\nfor the best erections you ' ve ever had !\r\nsoft tabs also have less sid",
+        "patterns_detected": [
+          "generic_spam"
+        ],
+        "spam_score": 0.85,
+        "why_spam": "Contains multiple spam indicators"
+      }
+    ],
+    "ham": [
+      {
+        "text": "Subject: re : meter 0980438 - acock production ? ? ? ? ? ?\r\ndaren / vance :\r\nany light you could shed on this would be appreciated .\r\nmary\r\n- - - - - - - - - - - - - - - - - - - - - - forwarded by mary poorman / na / enron on 10 / 23 / 2000 01 : 31\r\npm - - - - - - - - - - - - - - - - - - - - - - - - - - -\r\nfred boas @ ect\r\n10 / 23 / 2000 01 : 21 pm\r\nto : mary poorman / na / enron @ enron\r\ncc : nick moshou / corp / enron @ enron , cynthia hakemack / hou / ect @ ect , kristen j\r\nhanson / hou / ect",
+        "patterns_detected": [
+          "business_correspondence"
+        ],
+        "spam_score": 0.05,
+        "why_ham": "Legitimate internal business email with reply thread"
+      },
+      {
+        "text": "Subject: re : 98 - 6892 for 3 / 15 / 2000 and 3 / 23 / 2000\r\nray calles ( tetco ) told me today that he will put the oba in the mail either\r\ntonight or first thing monday .\r\nthanks for your help .\r\n- jackie -\r\n3 - 9497\r\ndaren j farmer\r\n03 / 31 / 2000 10 : 46 am\r\nto : jackie young / hou / ect @ ect\r\ncc :\r\nsubject : re : 98 - 6892 for 3 / 15 / 2000 and 3 / 23 / 2000\r\ndon ' t we have an oba at this point now ?\r\nd\r\njackie young\r\n03 / 31 / 2000 09 : 15 am\r\nto : daren j farmer / hou / ect @ ect\r\ncc :\r",
+        "patterns_detected": [
+          "transactional_emails",
+          "specific_details"
+        ],
+        "spam_score": 0.03,
+        "why_ham": "Legitimate transactional email with specific details"
+      },
+      {
+        "text": "Subject: re : 98 - 6892 for 3 / 15 / 2000 and 3 / 23 / 2000\r\nray calles ( tetco ) told me today that he will put the oba in the mail either\r\ntonight or first thing monday .\r\nthanks for your help .\r\n- jackie -\r\n3 - 9497\r\ndaren j farmer\r\n03 / 31 / 2000 10 : 46 am\r\nto : jackie young / hou / ect @ ect\r\ncc :\r\nsubject : re : 98 - 6892 for 3 / 15 / 2000 and 3 / 23 / 2000\r\ndon ' t we have an oba at this point now ?\r\nd\r\njackie young\r\n03 / 31 / 2000 09 : 15 am\r\nto : daren j farmer / hou / ect @ ect\r\ncc :\r",
+        "patterns_detected": [
+          "legitimate_email"
+        ],
+        "spam_score": 0.1,
+        "why_ham": "Professional email with appropriate context"
+      },
+      {
+        "text": "Subject: your mom\r\nremember me ? i ' m the one who loved you so much that i gave my very best at\r\nraising you . and now i ' m missing you so much . lacy & i can ' t understand why\r\nyou don ' t call to check on us & just to talk a while - - it doesn ' t count that\r\ntonya calls - - i didn ' t raise her . we want to hear your voice every once in a\r\nwhile . i know you work a lot , but you used to find time once a week . and\r\nthat ' s no excuse . you can schedule in a call to us . we ' re still your ",
+        "patterns_detected": [
+          "legitimate_email"
+        ],
+        "spam_score": 0.1,
+        "why_ham": "Professional email with appropriate context"
+      },
+      {
+        "text": "Subject: conoco - big cowboy\r\ndarren :\r\ni ' m not sure if you can help me with this , but i don ' t know who else to ask . for april and may , we have gas pathed on deal 133304 to conoco at the gepl big cowboy point . conoco is saying that we did not buy that gas from them . they have accounted for all of the hpl big cowboy gas and think we have over paid by about $ 1 . 5 mil each month for the gepl gas . do you know why we added the gepl meter to the deal in april ? could we have bought this ga",
+        "patterns_detected": [
+          "legitimate_email"
+        ],
+        "spam_score": 0.1,
+        "why_ham": "Professional email with appropriate context"
+      }
+    ]
+  }
+}

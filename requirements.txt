@@ -1,0 +1,16 @@
+# Multi-Agent Spam Classifier Requirements
+# Python 3.10+
+
+# Data processing
+pandas>=2.0.0
+
+# Testing (optional)
+pytest>=7.4.0
+
+# Email parsing (included in Python stdlib, but listed for reference)
+# email - built-in
+# json - built-in
+
+# Note: This system does NOT use traditional ML libraries
+# NO scikit-learn, TensorFlow, or PyTorch required
+# Classification is done purely through Claude Code agents
